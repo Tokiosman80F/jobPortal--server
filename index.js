@@ -31,8 +31,23 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     
-    // --- get the job data
-     
+    const jobsDB=client.db("jobPortal").collection("jobs")
+
+    // --- get the All job data
+    app.get("/allJob",async(req,res)=>{
+      const cursor=  jobsDB.find()
+      const result=await cursor.toArray()
+      res.send(result)
+
+    })
+    // --- post the job data 
+    app.post('/postJob',async(req,res)=>{
+        const data=req.body
+        console.log(data);
+        if(!data){ return res.status(404).send({message:"body data is not found"})}
+        const result= await jobsDB.insertOne(data) 
+        res.send(result)
+    })
     
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
