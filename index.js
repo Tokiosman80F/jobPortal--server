@@ -35,11 +35,11 @@ async function run() {
 
     // --- get the All job data
     app.get("/allJob",async(req,res)=>{
-      const cursor=  jobsDB.find()
-      const result=await cursor.toArray()
+        
+      const result=await jobsDB.find().toArray()
       res.send(result)
-
     })
+   
     // --- post the job data 
     app.post('/postJob',async(req,res)=>{
         const data=req.body
