@@ -39,11 +39,27 @@ async function run() {
       const result=await jobsDB.find().toArray()
       res.send(result)
     })
-   //---get only user job
+   // ---get only user job
     app.get('/myjob/:email',async(req,res)=>{
       const email=req.params.email
       console.log(email);
       const result= await jobsDB.find({email:email}).toArray()
+      res.send(result)
+    })
+    // creating index for search 
+    // 1. creating field
+    const indexKey={title:1,department:1}
+    const indexOption={name:'title-department'}
+    const result= await jobsDB.createIndex(indexKey,indexOption)
+
+    app.get('/jobSearching/:text',async(req,res)=>{
+      const searchText=req.params.text
+      const result=await jobsDB.find({
+        $or:[
+          {title:{$regex:searchText,$options:'i'}},
+          {department:{$regex:searchText,$options:'i'}}
+        ]
+      }).toArray()
       res.send(result)
     })
 
