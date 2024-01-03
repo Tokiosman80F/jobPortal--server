@@ -39,7 +39,14 @@ async function run() {
       const result=await jobsDB.find().toArray()
       res.send(result)
     })
-   
+   //---get only user job
+    app.get('/myjob/:email',async(req,res)=>{
+      const email=req.params.email
+      console.log(email);
+      const result= await jobsDB.find({email:email}).toArray()
+      res.send(result)
+    })
+
     // --- post the job data 
     app.post('/postJob',async(req,res)=>{
         const data=req.body
